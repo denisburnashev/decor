@@ -9,18 +9,24 @@ def decorator(old_fucntion):
 
     def new_function(*args, **kwargs):
         result = old_fucntion()
-        user_input = input('Введите путь куда сохранить log файл:\n')
-        os.chdir(user_input)
-        print(f'Log файл будет сохранен в {os.getcwd()}')
         with open('log.txt', 'a', encoding='utf-8') as link:
             link.writelines(f'Время записи:{time_log}\n'
                             f'Имя функции: {old_fucntion.__name__}\n'
                             f'Аргументы: {args}, {kwargs}\n'
-                            f'Возвращаемое значение: {result}\n'
-                            f'Путь к log файлу: {os.getcwd()}')
+                            f'Возвращаемое значение: {result}\n')
+        print(f'Log файл рассполложен: {os.getcwd()}')
         return result
 
     return new_function()
+
+
+def decor_decorator(old_fucntion):
+
+    def new_fucntion(*args, **kwargs):
+        result = old_fucntion(decorator)
+        return result
+
+    return new_fucntion()
 
 
 def selecting_folder():
@@ -46,3 +52,5 @@ def selecting_folder():
 
 
 decorator(selecting_folder)
+
+
